@@ -14,7 +14,7 @@ metadata:
 spec:
   project: {{ .Values.global.control_plane.project }}
   source:
-    repoURL: https://github.com/luciano-personal-org/cluster-baseline-deployment
+    repoURL: {{ .Values.global.control_plane.repo }}
     targetRevision: HEAD
     path: {{ printf "addon_charts/%s" .Values.reloader.addon_name }}
     helm:

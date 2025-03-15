@@ -2,6 +2,7 @@ global:
   control_plane: 
     namespace: control-plane-system
     project: control-plane-project
+    repo: https://github.com/lurodrisilva/gitops
     deployment: 
       limit: 5
       backoff:
@@ -71,7 +72,7 @@ opentelemetry_collector: # Disabled to save resources.
 
 datadog_operator:
   addon_name: datadog-operator
-  enabled: true
+  enabled: false
   namespace: control-plane-system
 
 reloader:
