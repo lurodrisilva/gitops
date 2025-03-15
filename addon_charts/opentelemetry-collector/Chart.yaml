@@ -1,0 +1,19 @@
+apiVersion: v2
+name: opentelemetry-collector
+description: Managed Resources addon for the control plane cluster
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
+
+keywords:
+  - OpenTelemetry
+  - Monitoring
+  - Control Plane System
+
+dependencies:
+  - name: opentelemetry-collector
+    version: 0.111.1
+    repository:  https://open-telemetry.github.io/opentelemetry-helm-charts

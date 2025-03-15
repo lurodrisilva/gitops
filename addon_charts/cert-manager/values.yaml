@@ -1,0 +1,29 @@
+cert-manager:
+  replicaCount: 2
+  crds:
+    enabled: true
+  prometheus:
+    enabled: false
+  webhook:
+    timeoutSeconds: 4
+  global:
+    leaderElection:
+      namespace: control-plane-system
+
+  # Deployment Section
+  namespace: control-plane-system
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  podDisruptionBudget:
+    enabled: true
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 100Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi

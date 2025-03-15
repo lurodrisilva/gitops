@@ -1,0 +1,19 @@
+apiVersion: v2
+name: datadog
+description: Datadog agent for the Algo Trading Platform
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
+
+keywords:
+  - Datadog Operator
+  - Monitoring
+  - Algo Trading Platform
+
+dependencies:
+  - name: datadog-operator
+    version: 2.5.1
+    repository:  https://helm.datadoghq.com

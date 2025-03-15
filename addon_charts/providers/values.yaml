@@ -1,0 +1,14 @@
+# Default values for busybox.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+providers:
+  namespace: resources-system
+  replicas: 1
+
+resources:
+  limits:
+    cpu: 150m
+    memory: 400Mi
+  requests:
+    cpu: 150m
+    memory: 400Mi

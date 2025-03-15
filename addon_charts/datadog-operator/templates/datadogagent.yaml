@@ -1,0 +1,77 @@
+apiVersion: datadoghq.com/v2alpha1
+kind: DatadogAgent
+metadata:
+  name: datadog
+  annotations:
+    ad.datadoghq.com/endpoints.check_names: '["kube_apiserver_metrics"]'
+    ad.datadoghq.com/endpoints.init_configs: '[{}]'
+    ad.datadoghq.com/endpoints.instances:
+      '[{ "prometheus_url": "https://%%host%%:%%port%%/metrics", "bearer_token_auth": "true" }]'
+spec:
+  global:
+    clusterName: algo-trading-plat
+    registry: public.ecr.aws/datadog
+    site: datadoghq.com
+    credentials:
+        apiKey: {{ .Values.apiKey }}
+        appKey: {{ .Values.appKey }}
+    nodeLabelsAsTags:
+      "*": <PREFIX>_%%label%%
+    namespaceLabelsAsTags:
+      "*": <PREFIX>_%%label%%
+    podLabelsAsTags:
+      "*": <PREFIX>_%%label%%
+  features:
+    otlp: # Open Telemetry Protocol
+      receiver:
+        protocols:
+          grpc:
+            enabled: true
+          http:
+            enabled: true
+    liveProcessCollection:
+      enabled: true
+    logCollection:
+      enabled: true
+      containerCollectAll: true
+    admissionController:
+      enabled: true
+      mutateUnlabelled: false
+    apm: # FIXME: conflicting with otlp
+      enabled: true
+      # hostPortConfig:
+      #   enabled: true
+      #   hostPort: 8126
+      unixDomainSocketConfig:
+        path: /var/run/datadog/apm.socket
+      instrumentation:
+        enabled: true
+    externalMetricsServer:
+      enabled: true
+    cws:
+      enabled: true
+    cspm:
+      enabled: true
+    sbom:
+      containerImage:
+        enabled: true
+    usm:
+      enabled: true
+    npm:
+      enabled: true
+    kubeStateMetricsCore:
+      enabled: true
+  override:
+    nodeAgent:
+      extraConfd:
+        configDataMap:
+          kube_metrics_server.yaml: |-
+            ad_identifiers:
+              - {}
+            init_config:
+              {}
+            instances:
+              {"prometheus_url": "https://%%host%%:443/metrics"}
+      env:
+        - name: DD_PROCESS_CONFIG_RUN_IN_CORE_AGENT_ENABLED
+          value: "true"

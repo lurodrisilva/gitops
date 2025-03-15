@@ -1,0 +1,22 @@
+# Default values for busybox.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+namespace: resources-system
+replicas: 2
+
+providers_config:
+  cloud: aws # others in the future
+  packagePullPolicy: Always
+  config:
+    name: default
+  secret:
+    name: aws-secret
+    key: creds
+
+resources:
+  limits:
+    cpu: 150m
+    memory: 400Mi
+  requests:
+    cpu: 150m
+    memory: 400Mi

@@ -1,0 +1,95 @@
+global:
+  control_plane: 
+    namespace: control-plane-system
+    project: control-plane-project
+    deployment: 
+      limit: 5
+      backoff:
+        duration: 240s
+        factor: 2
+        maxDuration: 10m
+
+resources:
+  addon_name: resources
+  enabled: true
+  namespace: resources-system
+
+providers:
+  addon_name: providers
+  enabled: true
+  namespace: resources-system
+
+providers_config:
+  addon_name: providers-config
+  enabled: true
+  namespace: resources-system
+
+backup: # not yet configured.
+  addon_name: backup
+  enabled: false
+  namespace: backup-system
+
+sample: # just a sample
+  addon_name: sample
+  enabled: false
+  namespace: backup-system
+
+karpenter: # not used for now, deployed thru terraform.
+  addon_name: karpenter
+  enabled: false
+  namespace: karpenter
+
+metrics_server:
+  addon_name: metrics-server
+  enabled: true
+  namespace: control-plane-system
+
+kube_state_metrics:
+  addon_name: kube-state-metrics
+  enabled: true
+  namespace: control-plane-system
+
+node_problem_detector:
+  addon_name: node-problem-detector
+  enabled: true
+  namespace: control-plane-system
+
+cert_manager: # Disabled to save resources.
+  addon_name: cert-manager
+  enabled: true
+  namespace: control-plane-system
+
+opentelemetry_operator: # Disabled to save resources.
+  addon_name: opentelemetry-operator
+  enabled: false
+  namespace: control-plane-system
+
+opentelemetry_collector: # Disabled to save resources.
+  addon_name: opentelemetry-collector
+  enabled: false
+  namespace: control-plane-system
+
+datadog_operator:
+  addon_name: datadog-operator
+  enabled: true
+  namespace: control-plane-system
+
+reloader:
+  addon_name: reloader
+  enabled: true
+  namespace: control-plane-system
+
+cluster_secret:
+  addon_name: cluster-secret
+  enabled: false
+  namespace: control-plane-system
+
+kube_cost:
+  addon_name: kubecost
+  enabled: true
+  namespace: control-plane-system
+
+observability:
+  addon_name: observability
+  enabled: true
+  namespace: control-plane-system

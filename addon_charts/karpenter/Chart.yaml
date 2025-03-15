@@ -1,0 +1,21 @@
+apiVersion: v2
+name: karpenter
+description: Karpenter addon for the the cluster
+
+type: application
+
+version: 1.0.0
+
+appVersion: "1.0.0"
+
+keywords:
+  - karpenter
+  - autoscaler
+  - kube system
+
+# dependencies:
+#   - name: karpenter
+#     namespace: karpenter
+#     alias: karpentercontroller
+#     version: 1.0.6
+#     repository: oci://public.ecr.aws/karpenter

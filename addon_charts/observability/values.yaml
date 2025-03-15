@@ -1,0 +1,3 @@
+observability:
+  replicas: 2
+  debug: true

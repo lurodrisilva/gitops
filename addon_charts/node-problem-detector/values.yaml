@@ -1,0 +1,33 @@
+node-problem-detector:
+  fullnameOverride: algo-trading-plat-npd
+  namespace: control-plane-system
+  settings:
+    log_monitors:
+      - /config/kernel-monitor.json
+      - /config/docker-monitor.json
+  resources:
+    limits:
+      cpu: 200m
+      memory: 100Mi
+    requests:
+      cpu: 20m
+      memory: 20Mi
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
+  hostpath:
+    logdir: /var/log/journal
+  metrics:
+    enabled: true
+    namespace: control-plane-system
+    replicas: 2
+    provider:
+      cloud: aws
+      packagePullPolicy: Always
+      config:
+        name: aws-auth
+      secret:
+        name: aws-secret
+        key: creds
+

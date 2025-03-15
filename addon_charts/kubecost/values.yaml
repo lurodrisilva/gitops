@@ -1,0 +1,50 @@
+cost-analyzer:
+    storage_class: kube-cost-storage-class
+    persistent_volume_claim: kube-cost-pvc
+    persistent_volume_claim_size: 20Gi
+    # grafana is disabled by default, but can be enabled by setting the following values.
+    # or proxy to an existing grafana: https://docs.kubecost.com/install-and-configure/advanced-configuration/custom-grafana
+    global:
+      grafana:
+        enabled: false
+        proxy: false
+    # grafana:
+    #   image:
+    #     repository: YOUR_REGISTRY/grafana
+    #   sidecar:
+    #     image:
+    #       repository: YOUR_REGISTRY/k8s-sidecar
+
+    kubecostFrontend:
+      image: public.ecr.aws/kubecost/frontend
+
+    kubecostModel:
+      image: public.ecr.aws/kubecost/cost-model
+
+    forecasting:
+      fullImageName: public.ecr.aws/kubecost/kubecost-modeling:v0.1.19
+
+    networkCosts:
+      image:
+        repository: public.ecr.aws/kubecost/kubecost-network-costs
+        tag: v0.17.6
+
+    clusterController:
+      image:
+        repository: public.ecr.aws/kubecost/cluster-controller
+
+    prometheus:
+      server:
+        image:
+          repository: public.ecr.aws/kubecost/prometheus
+
+      configmapReload:
+        prometheus:
+          image:
+            repository: public.ecr.aws/kubecost/prometheus-config-reloader
+
+    reporting:
+      productAnalytics: false
+
+
+  # Warning  FailedScheduling  96s   default-scheduler  0/4 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/4 nodes are available: 4 Preemption is not helpful for scheduling.
