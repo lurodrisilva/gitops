@@ -92,5 +92,5 @@ kube_cost:
 
 observability:
   addon_name: observability
-  enabled: true
+  enabled: false
   namespace: control-plane-system
