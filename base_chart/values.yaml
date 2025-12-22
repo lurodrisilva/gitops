@@ -1,7 +1,7 @@
 global:
   control_plane: 
     namespace: control-plane-system
-    project: control-plane-project
+    project: addons-project
     repo: https://github.com/lurodrisilva/gitops
     deployment: 
       limit: 5

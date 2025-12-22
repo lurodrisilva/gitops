@@ -6,12 +6,12 @@ crossplane:
   replicas: 2
 
 provider:
-  cloud: aws # others in the future
+  cloud: azure # others in the future
   packagePullPolicy: Always
   config:
     name: default
   secret:
-    name: aws-secret
+    name: azure-secret
     key: creds
 
 

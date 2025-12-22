@@ -5,12 +5,12 @@ namespace: resources-system
 replicas: 2
 
 providers_config:
-  cloud: aws # others in the future
+  cloud: azure # others in the future
   packagePullPolicy: Always
   config:
     name: default
   secret:
-    name: aws-secret
+    name: azure-secret
     key: creds
 
 resources:

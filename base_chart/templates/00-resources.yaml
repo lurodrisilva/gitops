@@ -47,6 +47,7 @@ spec:
       - Force=true
       - PrunePropagationPolicy=foreground
       - PruneLast=true
+      - CreateNamespace=true      
     {{- with .Values.global.control_plane.deployment }}
     retry:
       limit: {{ .limit }}
