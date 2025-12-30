@@ -87,7 +87,7 @@ cluster_secret:
 
 kube_cost:
   addon_name: kubecost
-  enabled: true
+  enabled: false
   namespace: control-plane-system
 
 observability:
