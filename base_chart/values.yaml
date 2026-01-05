@@ -42,17 +42,17 @@ karpenter: # not used for now, deployed thru terraform.
 
 metrics_server:
   addon_name: metrics-server
-  enabled: true
+  enabled: false
   namespace: control-plane-system
 
 kube_state_metrics:
   addon_name: kube-state-metrics
-  enabled: true
+  enabled: false
   namespace: control-plane-system
 
 node_problem_detector:
   addon_name: node-problem-detector
-  enabled: true
+  enabled: false
   namespace: control-plane-system
 
 cert_manager: # Disabled to save resources.
