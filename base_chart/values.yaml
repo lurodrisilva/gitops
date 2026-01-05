@@ -12,17 +12,17 @@ global:
 
 resources:
   addon_name: resources
-  enabled: true
+  enabled: false
   namespace: resources-system
 
 providers:
   addon_name: providers
-  enabled: true
+  enabled: false
   namespace: resources-system
 
 providers_config:
   addon_name: providers-config
-  enabled: true
+  enabled: false
   namespace: resources-system
 
 backup: # not yet configured.
