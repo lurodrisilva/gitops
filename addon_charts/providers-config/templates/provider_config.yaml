@@ -1,12 +1,23 @@
+# ---
+# apiVersion: aws.upbound.io/v1beta1
+# kind: ProviderConfig
+# metadata:
+#   name: {{ .Values.providers_config.config.name }}
+# spec:
+#   credentials:
+#     source: Secret
+#     secretRef:
+#       namespace: {{ .Values.namespace }}
+#       name: {{ .Values.providers_config.secret.name }}
+#       key: {{ .Values.providers_config.secret.key }}
 ---
-apiVersion: aws.upbound.io/v1beta1
+apiVersion: azure.m.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
-  name: {{ .Values.providers_config.config.name }}
+  name: default
 spec:
   credentials:
-    source: Secret
-    secretRef:
-      namespace: {{ .Values.namespace }}
-      name: {{ .Values.providers_config.secret.name }}
-      key: {{ .Values.providers_config.secret.key }}
+    source: SystemAssignedManagedIdentity
+  subscriptionID: d804a1da-6c31-4b69-b7b9-7e3560d38a6e
+  tenantID: 8f77fb2e-7e77-477e-9a03-d078b7aad9c3
+  clientID: 1748d337-145b-4880-8e75-222bbff354e4

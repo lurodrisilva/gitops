@@ -1,83 +1,83 @@
----
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-aws-s3
+  name: provider-redis-azure
 spec:
-  package: xpkg.upbound.io/upbound/provider-aws-s3:v1
+  package: xpkg.upbound.io/upbound/provider-azure-cache:v2.3.0
   packagePullPolicy: Always
-  settings:
-    logging:
-      level: debug
-    aws:
-      maxRetries: 10  # Increase retry attempts
+
+  # settings:
+  #   logging:
+  #     level: debug
+  #   aws:
+  #     maxRetries: 10  # Increase retry attempts
   # args:
   #   - core
   #   - start
   #   - --provider-ratelimit-qps=20  # Increase from default
   #   - --provider-ratelimit-burst=50  # Increase from default
   #   - --sync-timeout=5m  # Extend default timeout (default is 2m)
----
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-aws-eks
-spec:
-  package: xpkg.upbound.io/upbound/provider-aws-eks:v1.18.2
-  packagePullPolicy: Always
-  settings:
-    logging:
-      level: debug
-    aws:
-      maxRetries: 10  # Increase retry attempts
-  # args:
-  #   - core
-  #   - start
-  #   - --provider-ratelimit-qps=20  # Increase from default
-  #   - --provider-ratelimit-burst=50  # Increase from default
-  #   - --sync-timeout=5m  # Extend default timeout (default is 2m)
----
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-aws-ec2
-spec:
-  package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.18.2
-  packagePullPolicy: Always
-  settings:
-    logging:
-      level: debug
-    aws:
-      maxRetries: 10  # Increase retry attempts
-  # args:
-  #   - core
-  #   - start
-  #   - --provider-ratelimit-qps=20  # Increase from default
-  #   - --provider-ratelimit-burst=50  # Increase from default
-  #   - --sync-timeout=5m  # Extend default timeout (default is 2m)
----
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-aws-iam
-spec:
-  package: xpkg.upbound.io/upbound/provider-aws-iam:v1
-  packagePullPolicy: Always
-  settings:
-    logging:
-      level: debug
-    aws:
-      maxRetries: 10  # Increase retry attempts
----
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-aws-efs
-spec:
-  package: xpkg.upbound.io/upbound/provider-aws-efs:v1.12.0
-  packagePullPolicy: Always
-  settings:
-    logging:
-      level: debug
-    aws:
-      maxRetries: 10  # Increase retry attempts
+# ---
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-aws-eks
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-aws-eks:v1.18.2
+#   packagePullPolicy: Always
+#   settings:
+#     logging:
+#       level: debug
+#     aws:
+#       maxRetries: 10  # Increase retry attempts
+#   # args:
+#   #   - core
+#   #   - start
+#   #   - --provider-ratelimit-qps=20  # Increase from default
+#   #   - --provider-ratelimit-burst=50  # Increase from default
+#   #   - --sync-timeout=5m  # Extend default timeout (default is 2m)
+# ---
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-aws-ec2
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-aws-ec2:v1.18.2
+#   packagePullPolicy: Always
+#   settings:
+#     logging:
+#       level: debug
+#     aws:
+#       maxRetries: 10  # Increase retry attempts
+#   # args:
+#   #   - core
+#   #   - start
+#   #   - --provider-ratelimit-qps=20  # Increase from default
+#   #   - --provider-ratelimit-burst=50  # Increase from default
+#   #   - --sync-timeout=5m  # Extend default timeout (default is 2m)
+# ---
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-aws-iam
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-aws-iam:v1
+#   packagePullPolicy: Always
+#   settings:
+#     logging:
+#       level: debug
+#     aws:
+#       maxRetries: 10  # Increase retry attempts
+# ---
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-aws-efs
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-aws-efs:v1.12.0
+#   packagePullPolicy: Always
+#   settings:
+#     logging:
+#       level: debug
+#     aws:
+#       maxRetries: 10  # Increase retry attempts
