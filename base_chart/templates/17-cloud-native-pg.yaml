@@ -16,7 +16,7 @@ spec:
   source:
     repoURL: {{ .Values.global.control_plane.repo }}
     targetRevision: HEAD
-    path: {{ printf "addon_charts/%s" .Values.observability.addon_name }}
+    path: {{ printf "addon_charts/%s" .Values.cloud_native_pg.addon_name }}
     helm:
       valueFiles:
         - values.yaml
