@@ -23,6 +23,12 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.global.control_plane.namespace }}
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: cert-manager-webhook
+      jsonPointers:
+        - /webhooks/0/namespaceSelector/matchExpressions
   syncPolicy:
     automated:
       prune: true
