@@ -35,6 +35,7 @@ spec:
       - Force=true
       - PrunePropagationPolicy=foreground
       - PruneLast=true
+      - ServerSideApply=true
     {{- with .Values.global.control_plane.deployment }}
     retry:
       limit: {{ .limit }}
