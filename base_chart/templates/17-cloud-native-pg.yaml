@@ -1,9 +1,9 @@
 ---
-{{- if (.Values.cloud_native_pg.enabled) }}
+{{- if (.Values.cloudnative_pg.enabled) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.cloud_native_pg.addon_name }}
+  name: {{ .Values.cloudnative_pg.addon_name }}
   namespace: {{ .Values.global.control_plane.namespace }}
   annotations:
     argocd.argoproj.io/manifest-generate-paths: .
@@ -16,13 +16,13 @@ spec:
   source:
     repoURL: {{ .Values.global.control_plane.repo }}
     targetRevision: HEAD
-    path: {{ printf "addon_charts/%s" .Values.cloud_native_pg.addon_name }}
+    path: {{ printf "addon_charts/%s" .Values.cloudnative_pg.addon_name }}
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ .Values.global.control_plane.namespace }}
+    namespace: {{ .Values.global.cloudnative_pg.namespace }}
   syncPolicy:
     automated:
       prune: true

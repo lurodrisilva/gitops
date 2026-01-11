@@ -12,7 +12,6 @@ keywords:
   - PostgreSQL
   - Database
   - CloudNativePG
-  - Storage Node System
 
 dependencies:
   - name: cloudnative-pg

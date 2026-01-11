@@ -95,7 +95,7 @@ observability:
   enabled: false
   namespace: control-plane-system
 
-cloud_native_pg:
+cloudnative_pg:
   addon_name: cloudnative-pg
   enabled: true
   namespace: resources-system
