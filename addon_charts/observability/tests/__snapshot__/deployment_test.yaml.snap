@@ -1,0 +1,50 @@
+should render a Deployment:
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: lgtm
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: lgtm
+      template:
+        metadata:
+          labels:
+            app: lgtm
+        spec:
+          containers:
+            - image: grafana/otel-lgtm:latest
+              name: lgtm
+              ports:
+                - containerPort: 3000
+                - containerPort: 4317
+                - containerPort: 4318
+              readinessProbe:
+                exec:
+                  command:
+                    - cat
+                    - /tmp/ready
+              volumeMounts:
+                - mountPath: /data/tempo
+                  name: tempo-data
+                - mountPath: /data/grafana
+                  name: grafana-data
+                - mountPath: /data/loki
+                  name: loki-data
+                - mountPath: /loki
+                  name: loki-storage
+                - mountPath: /data/prometheus
+                  name: p8s-storage
+          volumes:
+            - emptyDir: {}
+              name: tempo-data
+            - emptyDir: {}
+              name: loki-data
+            - emptyDir: {}
+              name: grafana-data
+            - emptyDir: {}
+              name: loki-storage
+            - emptyDir: {}
+              name: p8s-storage

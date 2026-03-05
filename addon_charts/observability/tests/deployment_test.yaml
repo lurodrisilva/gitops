@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: observability deployment
+templates:
+  - templates/00_deployment.yaml
+tests:
+  - it: should render a Deployment
+    asserts:
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: metadata.name
+          value: lgtm
+      - equal:
+          path: spec.replicas
+          value: 2
+      - matchSnapshot: {}
