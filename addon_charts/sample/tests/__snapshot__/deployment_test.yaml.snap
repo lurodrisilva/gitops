@@ -1,0 +1,43 @@
+should render a Deployment:
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        chart: busybox-0.0.2
+      name: RELEASE-NAME-busybox
+      namespace: backup-system
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: RELEASE-NAME-busybox
+      template:
+        metadata:
+          labels:
+            app: RELEASE-NAME-busybox
+        spec:
+          containers:
+            - command:
+                - tail
+                - -f
+                - /dev/null
+              image: busybox:latest
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                exec:
+                  command:
+                    - cat
+                    - /dev/null
+                initialDelaySeconds: 5
+                periodSeconds: 5
+              name: busybox
+              ports:
+                - containerPort: 8080
+              readinessProbe:
+                exec:
+                  command:
+                    - cat
+                    - /dev/null
+                initialDelaySeconds: 5
+                periodSeconds: 5
