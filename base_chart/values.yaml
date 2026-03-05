@@ -55,7 +55,7 @@ node_problem_detector:
   enabled: false
   namespace: control-plane-system
 
-cert_manager: # Disabled to save resources.
+cert_manager:
   addon_name: cert-manager
   enabled: true
   namespace: control-plane-system
@@ -97,5 +97,10 @@ observability:
 
 cloudnative_pg:
   addon_name: cloudnative-pg
+  enabled: true
+  namespace: resources-system
+
+azure_service_operator: 
+  addon_name: azure-service-operator
   enabled: true
   namespace: resources-system

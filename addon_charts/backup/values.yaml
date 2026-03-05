@@ -1,21 +1,41 @@
-# Default values for busybox.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-namespace: backup-system
-replicaCount: 1
-image:
-  repository: busybox
-  tag: latest
-  pullPolicy: IfNotPresent
-service:
-  name: busybox
-  type: ClusterIP
-  externalPort: 80
-  internalPort: 8080
-resources:
-  limits:
-    cpu: 100m
-    memory: 100Mi
-  requests:
-    cpu: 100m
-    memory: 100Mi
+# Velero backup configuration for AKS (Azure)
+# This addon requires the following secrets to be created manually:
+#   kubectl create secret generic velero-credentials -n backup-system --from-file=cloud=<credentials-file>
+
+velero:
+  # Azure blob storage for backup storage
+  configuration:
+    backupStorageLocation:
+      - name: default
+        provider: azure
+        bucket: "<AZURE_STORAGE_CONTAINER>" # TODO: set your container name
+        config:
+          storageAccount: "<AZURE_STORAGE_ACCOUNT>" # TODO: set storage account
+          resourceGroup: "<AZURE_RESOURCE_GROUP>" # TODO: set resource group
+          subscriptionId: "<AZURE_SUBSCRIPTION_ID>" # TODO: set subscription ID
+    volumeSnapshotLocation:
+      - name: default
+        provider: azure
+        config:
+          resourceGroup: "<AZURE_RESOURCE_GROUP>" # TODO: set resource group
+          subscriptionId: "<AZURE_SUBSCRIPTION_ID>" # TODO: set subscription ID
+
+  # Azure plugin for Velero
+  initContainers:
+    - name: velero-plugin-for-microsoft-azure
+      image: velero/velero-plugin-for-microsoft-azure:v1.8.0
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /target
+          name: plugins
+
+  credentials:
+    useSecret: true
+    secretContents:
+      cloud: |
+        AZURE_SUBSCRIPTION_ID=<AZURE_SUBSCRIPTION_ID>
+        AZURE_TENANT_ID=<AZURE_TENANT_ID>
+        AZURE_CLIENT_ID=<AZURE_CLIENT_ID>
+        AZURE_CLIENT_SECRET=<AZURE_CLIENT_SECRET>
+        AZURE_RESOURCE_GROUP=<AZURE_RESOURCE_GROUP>
+        AZURE_CLOUD_NAME=AzurePublicCloud

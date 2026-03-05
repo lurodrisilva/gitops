@@ -1,5 +1,5 @@
 apiVersion: v2
-name: providers_config
+name: providers-config
 description: A Helm chart for crossplane providers
 
 # A chart can be either an 'application' or a 'library' chart.

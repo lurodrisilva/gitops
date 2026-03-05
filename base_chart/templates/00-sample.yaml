@@ -34,7 +34,7 @@ spec:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ .Values.global.control_plane.namespace }}
+    namespace: {{ .Values.sample.namespace }}
   syncPolicy:
     automated:
       prune: true

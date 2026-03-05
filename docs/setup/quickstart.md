@@ -61,6 +61,7 @@ kubectl get applications -n control-plane-system
 # cert-manager
 # reloader
 # cloudnative-pg
+# azure-service-operator
 ```
 
 ### 5. Enable Additional Addons

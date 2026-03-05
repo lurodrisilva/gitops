@@ -1,13 +1,13 @@
 ---
-{{- if (.Values.kube_state_metrics.enabled) }}
+{{- if (.Values.azure_service_operator.enabled) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.kube_state_metrics.addon_name }}
+  name: {{ .Values.azure_service_operator.addon_name }}
   namespace: {{ .Values.global.control_plane.namespace }}
   annotations:
     argocd.argoproj.io/manifest-generate-paths: .
-    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-wave: "18"
     # argocd.argoproj.io/hook: PostSync
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -16,13 +16,13 @@ spec:
   source:
     repoURL: {{ .Values.global.control_plane.repo }}
     targetRevision: HEAD
-    path: {{ printf "addon_charts/%s" .Values.kube_state_metrics.addon_name }}
+    path: {{ printf "addon_charts/%s" .Values.azure_service_operator.addon_name }}
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ .Values.kube_state_metrics.namespace }}
+    namespace: {{ .Values.azure_service_operator.namespace }}
   syncPolicy:
     automated:
       prune: true
@@ -35,6 +35,7 @@ spec:
       - Force=true
       - PrunePropagationPolicy=foreground
       - PruneLast=true
+      - ServerSideApply=true
     {{- with .Values.global.control_plane.deployment }}
     retry:
       limit: {{ .limit }}

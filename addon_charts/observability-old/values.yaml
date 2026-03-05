@@ -1,7 +1,0 @@
-kube-prometheus-stack:
-  grafana:
-    service:
-      type: LoadBalancer
-  prometheus:
-    service:
-      type: LoadBalancer

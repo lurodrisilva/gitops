@@ -1,6 +1,7 @@
 apiVersion: v2
 description: A utility chart to verify clusters and processes
 name: busybox
+type: application
 version: 0.0.2
 maintainers:
   - name: Nikhil Gorantla

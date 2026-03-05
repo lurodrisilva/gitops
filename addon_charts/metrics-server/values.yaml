@@ -1,25 +1,7 @@
-# Default values for busybox.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-#namespace: control-plane-system
+# Metrics Server configuration for AKS
+# --kubelet-insecure-tls is required for AKS clusters
 metrics-server:
   replicas: 2
   namespaceOverride: control-plane-system
-
-provider:
-  cloud: aws # others in the future
-  packagePullPolicy: Always
-  config:
-    name: default
-  secret:
-    name: aws-secret
-    key: creds
-
-
-resources:
-  limits:
-    cpu: 100m
-    memory: 100Mi
-  requests:
-    cpu: 100m
-    memory: 100Mi
+  args:
+    - --kubelet-insecure-tls

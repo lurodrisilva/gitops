@@ -18,6 +18,6 @@ metadata:
 spec:
   credentials:
     source: SystemAssignedManagedIdentity
-  subscriptionID: d804a1da-6c31-4b69-b7b9-7e3560d38a6e
-  tenantID: 8f77fb2e-7e77-477e-9a03-d078b7aad9c3
-  clientID: 1748d337-145b-4880-8e75-222bbff354e4
+  subscriptionID: "<SUBSCRIPTION_ID>" # TODO: replace with actual value or inject via overlay
+  tenantID: "<TENANT_ID>" # TODO: replace with actual value or inject via overlay
+  clientID: "<CLIENT_ID>" # TODO: replace with actual value or inject via overlay

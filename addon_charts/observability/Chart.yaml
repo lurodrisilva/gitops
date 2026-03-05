@@ -1,6 +1,6 @@
 apiVersion: v2
 name: observability 
-description: A Helm chart for Kube Cost
+description: A Helm chart for observability stack (kube-prometheus-stack)
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -22,3 +22,8 @@ version: 1.0.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.0.0"
+
+dependencies:
+  - name: kube-prometheus-stack
+    version: 68.3.0
+    repository: https://prometheus-community.github.io/helm-charts

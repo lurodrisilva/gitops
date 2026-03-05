@@ -13,9 +13,8 @@ keywords:
   - autoscaler
   - kube system
 
-# dependencies:
-#   - name: karpenter
-#     namespace: karpenter
-#     alias: karpentercontroller
-#     version: 1.0.6
-#     repository: oci://public.ecr.aws/karpenter
+dependencies:
+  - name: karpenter
+    alias: karpentercontroller
+    version: 1.0.6
+    repository: oci://public.ecr.aws/karpenter

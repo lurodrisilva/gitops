@@ -1,0 +1,23 @@
+apiVersion: v2
+name: azure-service-operator
+description: Azure Serivce operator for Azure Services deployment thru Kubernetes
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
+
+keywords:
+  - Azure Service Operator
+  - Azure Services
+
+home: https://github.com/Azure/azure-service/operator/v2
+
+sources:
+  - https://github.com/Azure/azure-service/operator/v2
+
+dependencies:
+  - name: azure-service-operator
+    version: 2.18.0
+    repository: https://raw.githubusercontent.com/Azure/azure-service-operator/main/v2/charts

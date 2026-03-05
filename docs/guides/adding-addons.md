@@ -1,191 +1,200 @@
-   1 # Adding New Addons
-   2 
-   3 This guide shows you how to add custom addons to the platform.
-   4 
-   5 ## Prerequisites
-   6 
-   7 - Understanding of Helm charts
-   8 - Access to push to the repository
-   9 - Addon Helm chart or ability to create one
-  10 
-  11 ## Steps to Add a New Addon
-  12 
-  13 ### 1. Create Addon Chart Directory
-  14 
-  15 ```bash
-  16 mkdir -p addon_charts/my-addon
-  17 cd addon_charts/my-addon
-  18 ```
-  19 
-  20 ### 2. Create Chart.yaml
-  21 
-  22 ```yaml
-  23 apiVersion: v2
-  24 name: my-addon
-  25 description: My custom addon for the platform
-  26 type: application
-  27 version: 0.1.0
-  28 appVersion: "1.0.0"
-  29 
-  30 # Add upstream chart as dependency
-  31 dependencies:
-  32   - name: upstream-chart-name
-  33     version: 1.2.3
-  34     repository: https://charts.example.com
-  35 ```
-  36 
-  37 ### 3. Create values.yaml
-  38 
-  39 Add custom configuration overrides:
-  40 
-  41 ```yaml
-  42 # Override upstream chart values
-  43 upstream-chart-name:
-  44   replicaCount: 2
-  45   resources:
-  46     limits:
-  47       cpu: 200m
-  48       memory: 256Mi
-  49     requests:
-  50       cpu: 100m
-  51       memory: 128Mi
-  52 ```
-  53 
-  54 ### 4. Create ArgoCD Application Template
-  55 
-  56 Create `base_chart/templates/XX-my-addon.yaml` (where XX is sync wave number):
-  57 
-  58 ```yaml
-  59 ---
-  60 {{- if (.Values.my_addon.enabled) }}
-  61 apiVersion: argoproj.io/v1alpha1
-  62 kind: Application
-  63 metadata:
-  64   name: {{ .Values.my_addon.addon_name }}
-  65   namespace: {{ .Values.global.control_plane.namespace }}
-  66   annotations:
-  67     argocd.argoproj.io/sync-wave: "15"  # Adjust as needed
-  68   finalizers:
-  69     - resources-finalizer.argocd.argoproj.io
-  70 spec:
-  71   project: {{ .Values.global.control_plane.project }}
-  72   source:
-  73     repoURL: {{ .Values.global.control_plane.repo }}
-  74     targetRevision: HEAD
-  75     path: {{ printf "addon_charts/%s" .Values.my_addon.addon_name }}
-  76     helm:
-  77       valueFiles:
-  78         - values.yaml
-  79   destination:
-  80     server: https://kubernetes.default.svc
-  81     namespace: {{ .Values.my_addon.namespace }}
-  82   syncPolicy:
-  83     automated:
-  84       prune: true
-  85       selfHeal: true
-  86     syncOptions:
-  87       - CreateNamespace=true
-  88       - Validate=false
-  89       - Prune=true
-  90     {{- with .Values.global.control_plane.deployment }}
-  91     retry:
-  92       limit: {{ .limit }}
-  93       backoff:
-  94         duration: {{ .backoff.duration }}
-  95         factor: {{ .backoff.factor }}
-  96         maxDuration: {{ .backoff.maxDuration }}
-  97     {{- end }}
-  98 {{- end }}
-  99 ```
- 100 
- 101 ### 5. Add Configuration to base_chart/values.yaml
- 102 
- 103 ```yaml
- 104 my_addon:
- 105   addon_name: my-addon
- 106   enabled: false              # Start disabled
- 107   namespace: my-addon-system
- 108 ```
- 109 
- 110 ### 6. Test Locally
- 111 
- 112 ```bash
- 113 # Lint the base chart
- 114 helm lint base_chart/
- 115 
- 116 # Template and check output
- 117 helm template base_chart/ --values base_chart/values.yaml | grep -A 50 my-addon
- 118 
- 119 # Update dependencies
- 120 helm dependency update addon_charts/my-addon/
- 121 ```
- 122 
- 123 ### 7. Commit and Push
- 124 
- 125 ```bash
- 126 git add addon_charts/my-addon/ base_chart/
- 127 git commit -m "Add my-addon platform addon"
- 128 git push
- 129 ```
- 130 
- 131 ### 8. Enable and Test
- 132 
- 133 Edit `base_chart/values.yaml` to enable:
- 134 
- 135 ```yaml
- 136 my_addon:
- 137   enabled: true
- 138 ```
- 139 
- 140 Commit, push, and monitor deployment.
- 141 
- 142 ## Sync Wave Numbers
- 143 
- 144 Organize addons with sync waves for proper ordering:
- 145 
- 146 - 0-5: Infrastructure (resources, providers)
- 147 - 5-10: Core services (metrics, monitoring)
- 148 - 10-15: Platform services (cert-manager, reloader)
- 149 - 15+: Application services
- 150 
- 151 ## Best Practices
- 152 
- 153 1. **Use dependencies** - Reference upstream charts when possible
- 154 2. **Minimal values** - Only override what's necessary
- 155 3. **Resource limits** - Always set requests and limits
- 156 4. **Namespaces** - Use dedicated namespaces for isolation
- 157 5. **Testing** - Test locally before committing
- 158 6. **Documentation** - Add README in addon_charts/my-addon/
- 159 7. **Versioning** - Pin dependency versions in Chart.yaml
- 160 
- 161 ## Example: Adding Prometheus
- 162 
- 163 See `addon_charts/observability/` for a complete example of a complex addon.
- 164 
- 165 ## Troubleshooting
- 166 
- 167 ### Dependency Download Fails
- 168 
- 169 ```bash
- 170 # Update dependencies manually
- 171 helm dependency update addon_charts/my-addon/
- 172 
- 173 # Check Chart.lock file is created
- 174 ls addon_charts/my-addon/Chart.lock
- 175 ```
- 176 
- 177 ### Template Rendering Issues
- 178 
- 179 ```bash
- 180 # Test template rendering
- 181 helm template my-addon addon_charts/my-addon/
- 182 
- 183 # Check for YAML syntax
- 184 yamllint addon_charts/my-addon/values.yaml
- 185 ```
- 186 
- 187 ## Related Documentation
- 188 
- 189 - [Enabling Addons](enabling-addons.md)
- 190 - [Values Schema](../reference/values-schema.md)
- 191 - [Addon Reference](../reference/addon-list.md)
+# Adding New Addons
+
+This guide shows you how to add custom addons to the platform.
+
+## Prerequisites
+
+- Understanding of Helm charts
+- Access to push to the repository
+- Addon Helm chart or ability to create one
+
+## Steps to Add a New Addon
+
+### 1. Create Addon Chart Directory
+
+```bash
+mkdir -p addon_charts/my-addon
+cd addon_charts/my-addon
+```
+
+### 2. Create Chart.yaml
+
+```yaml
+apiVersion: v2
+name: my-addon
+description: My custom addon for the platform
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+# Add upstream chart as dependency
+dependencies:
+  - name: upstream-chart-name
+    version: 1.2.3
+    repository: https://charts.example.com
+```
+
+### 3. Create values.yaml
+
+Add custom configuration overrides:
+
+```yaml
+# Override upstream chart values
+upstream-chart-name:
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+```
+
+### 4. Create ArgoCD Application Template
+
+Create `base_chart/templates/XX-my-addon.yaml` (where XX is sync wave number):
+
+```yaml
+---
+{{- if (.Values.my_addon.enabled) }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.my_addon.addon_name }}
+  namespace: {{ .Values.global.control_plane.namespace }}
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: .
+    argocd.argoproj.io/sync-wave: "15"  # Must match file prefix number
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.global.control_plane.project }}
+  source:
+    repoURL: {{ .Values.global.control_plane.repo }}
+    targetRevision: HEAD
+    path: {{ printf "addon_charts/%s" .Values.my_addon.addon_name }}
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.my_addon.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - Validate=false
+      - Prune=true
+      - ApplyOutOfSyncOnly=true
+      - Force=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    {{- with .Values.global.control_plane.deployment }}
+    retry:
+      limit: {{ .limit }}
+      backoff:
+        duration: {{ .backoff.duration }}
+        factor: {{ .backoff.factor }}
+        maxDuration: {{ .backoff.maxDuration }}
+    {{- end }}
+{{- end }}
+```
+
+**Optional variations** (apply when needed):
+- Add `ignoreDifferences` for CRD-heavy addons (see `09-cert-manager.yaml`)
+- Add `ServerSideApply=true` to syncOptions for large CRDs (see `17-cloud-native-pg.yaml`, `18-azure-service-operator.yaml`)
+
+### 5. Add Configuration to base_chart/values.yaml
+
+```yaml
+my_addon:
+  addon_name: my-addon
+  enabled: false              # Start disabled
+  namespace: my-addon-system
+```
+
+### 6. Test Locally
+
+```bash
+# Lint the base chart
+helm lint base_chart/
+
+# Template and check output
+helm template base_chart/ --values base_chart/values.yaml | grep -A 50 my-addon
+
+# Update dependencies
+helm dependency update addon_charts/my-addon/
+```
+
+### 7. Commit and Push
+
+```bash
+git add addon_charts/my-addon/ base_chart/
+git commit -m "adding my-addon to the cluster"
+git push
+```
+
+### 8. Enable and Test
+
+Edit `base_chart/values.yaml` to enable:
+
+```yaml
+my_addon:
+  enabled: true
+```
+
+Commit, push, and monitor deployment.
+
+## Sync Wave Numbers
+
+Organize addons with sync waves for proper ordering:
+
+- 0-4: Infrastructure (resources, karpenter, metrics-server, providers, kube-state-metrics)
+- 5-9: Core services (node-problem-detector, otel, datadog, cert-manager)
+- 10-14: Platform services (reloader, providers-config, backup, cluster-secret)
+- 15-18: Application services (kubecost, observability, cloudnative-pg, azure-service-operator)
+
+## Best Practices
+
+1. **Use dependencies** - Reference upstream charts when possible
+2. **Minimal values** - Only override what's necessary
+3. **Resource limits** - Always set requests and limits
+4. **Namespaces** - Use dedicated namespaces for isolation
+5. **Testing** - Test locally before committing
+6. **Documentation** - Add README in addon_charts/my-addon/
+7. **Versioning** - Pin dependency versions in Chart.yaml
+
+## Example: Adding Prometheus
+
+See `addon_charts/observability/` for a complete example of a complex addon.
+
+## Troubleshooting
+
+### Dependency Download Fails
+
+```bash
+# Update dependencies manually
+helm dependency update addon_charts/my-addon/
+
+# Check Chart.lock file is created
+ls addon_charts/my-addon/Chart.lock
+```
+
+### Template Rendering Issues
+
+```bash
+# Test template rendering
+helm template my-addon addon_charts/my-addon/
+
+# Check for YAML syntax
+yamllint addon_charts/my-addon/values.yaml
+```
+
+## Related Documentation
+
+- [Enabling Addons](enabling-addons.md)
+- [Values Schema](../reference/values-schema.md)
+- [Addon Reference](../reference/addon-list.md)
