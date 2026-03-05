@@ -72,7 +72,10 @@ test: ## Run helm-unittest tests
 
 ## Update helm-unittest snapshots
 snapshot-update: ## Update helm-unittest snapshots
-	@echo "Updating helm-unittest snapshots..."
+	@echo "Updating helm-unittest snapshots for base_chart..."
+	helm unittest -u base_chart/
+	@echo ""
+	@echo "Updating helm-unittest snapshots for addon charts..."
 	@for chart in addon_charts/*/; do \
 		chart_name=$$(basename "$$chart"); \
 		if [ -d "$$chart/tests" ]; then \
