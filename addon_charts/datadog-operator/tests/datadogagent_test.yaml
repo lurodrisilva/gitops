@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: datadog-operator DatadogAgent
+templates:
+  - templates/datadogagent.yaml
+tests:
+  - it: should render a DatadogAgent
+    asserts:
+      - isKind:
+          of: DatadogAgent
+      - isAPIVersion:
+          of: datadoghq.com/v2alpha1
+      - equal:
+          path: metadata.name
+          value: datadog
+      - matchSnapshot: {}
