@@ -1,0 +1,73 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: sample ArgoCD Application
+templates:
+  - templates/00-sample.yaml
+tests:
+  - it: should render no documents when disabled
+    set:
+      sample.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should render 2 documents when enabled
+    set:
+      sample.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 2
+  - it: should render Namespace as first document
+    set:
+      sample.enabled: true
+    documentIndex: 0
+    asserts:
+      - isKind:
+          of: Namespace
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: metadata.name
+          value: control-plane-system
+  - it: should render Application as second document
+    set:
+      sample.enabled: true
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: Application
+      - isAPIVersion:
+          of: argoproj.io/v1alpha1
+      - equal:
+          path: metadata.name
+          value: sample
+      - equal:
+          path: metadata.namespace
+          value: control-plane-system
+      - equal:
+          path: metadata.annotations["argocd.argoproj.io/sync-wave"]
+          value: "0"
+      - equal:
+          path: spec.source.path
+          value: addon_charts/sample
+      - equal:
+          path: spec.destination.namespace
+          value: backup-system
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+      - equal:
+          path: spec.syncPolicy.automated.prune
+          value: true
+      - equal:
+          path: spec.syncPolicy.automated.selfHeal
+          value: true
+      - contains:
+          path: spec.syncPolicy.syncOptions
+          content: CreateNamespace=true
+      - contains:
+          path: spec.syncPolicy.syncOptions
+          content: PruneLast=true
+      - equal:
+          path: spec.syncPolicy.retry.limit
+          value: 5
+      - matchSnapshot:
+          path: spec.syncPolicy

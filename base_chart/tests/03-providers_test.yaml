@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: providers ArgoCD Application
+templates:
+  - templates/03-providers.yaml
+tests:
+  - it: should render no documents when disabled
+    set:
+      providers.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: should render one Application when enabled
+    set:
+      providers.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Application
+      - isAPIVersion:
+          of: argoproj.io/v1alpha1
+      - equal:
+          path: metadata.name
+          value: providers
+      - equal:
+          path: metadata.namespace
+          value: control-plane-system
+      - equal:
+          path: metadata.annotations["argocd.argoproj.io/sync-wave"]
+          value: "3"
+      - equal:
+          path: spec.source.path
+          value: addon_charts/providers
+      - equal:
+          path: spec.destination.namespace
+          value: resources-system
+      - contains:
+          path: metadata.finalizers
+          content: resources-finalizer.argocd.argoproj.io
+      - equal:
+          path: spec.syncPolicy.automated.prune
+          value: true
+      - equal:
+          path: spec.syncPolicy.automated.selfHeal
+          value: true
+      - contains:
+          path: spec.syncPolicy.syncOptions
+          content: CreateNamespace=true
+      - contains:
+          path: spec.syncPolicy.syncOptions
+          content: PruneLast=true
+      - equal:
+          path: spec.syncPolicy.retry.limit
+          value: 5
+      - matchSnapshot:
+          path: spec.syncPolicy

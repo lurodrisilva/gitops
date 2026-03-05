@@ -1,0 +1,12 @@
+should render a ProviderConfig:
+  1: |
+    apiVersion: azure.m.upbound.io/v1beta1
+    kind: ProviderConfig
+    metadata:
+      name: default
+    spec:
+      clientID: <CLIENT_ID>
+      credentials:
+        source: SystemAssignedManagedIdentity
+      subscriptionID: <SUBSCRIPTION_ID>
+      tenantID: <TENANT_ID>

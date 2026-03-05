@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: providers-config ProviderConfig
+templates:
+  - templates/provider_config.yaml
+tests:
+  - it: should render a ProviderConfig
+    asserts:
+      - isKind:
+          of: ProviderConfig
+      - isAPIVersion:
+          of: azure.m.upbound.io/v1beta1
+      - equal:
+          path: metadata.name
+          value: default
+      - equal:
+          path: spec.credentials.source
+          value: SystemAssignedManagedIdentity
+      - matchSnapshot: {}

@@ -1,0 +1,18 @@
+should render a Service:
+  1: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        chart: busybox-0.0.2
+      name: RELEASE-NAME-busybox
+      namespace: backup-system
+    spec:
+      ports:
+        - name: busybox
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: RELEASE-NAME-busybox
+      type: ClusterIP

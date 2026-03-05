@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: karpenter EC2NodeClass
+templates:
+  - templates/0_node_class.yaml
+tests:
+  - it: should render an EC2NodeClass
+    asserts:
+      - isKind:
+          of: EC2NodeClass
+      - isAPIVersion:
+          of: karpenter.k8s.aws/v1
+      - equal:
+          path: metadata.name
+          value: default
+      - matchSnapshot: {}

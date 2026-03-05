@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: observability service
+templates:
+  - templates/01_service.yaml
+tests:
+  - it: should render 2 documents
+    asserts:
+      - hasDocuments:
+          count: 2
+  - it: should render Service as first document
+    documentIndex: 0
+    asserts:
+      - isKind:
+          of: Service
+      - isAPIVersion:
+          of: v1
+      - equal:
+          path: metadata.name
+          value: lgtm
+      - equal:
+          path: spec.type
+          value: LoadBalancer
+  - it: should render Deployment as second document
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
+      - equal:
+          path: metadata.name
+          value: lgtm
+  - it: should include debug env var when debug is true
+    set:
+      observability.debug: true
+    documentIndex: 1
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ENABLE_LOGS_ALL
+            value: "true"
+  - it: should not include debug env var when debug is false
+    set:
+      observability.debug: false
+    documentIndex: 1
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: ENABLE_LOGS_ALL
+            value: "true"

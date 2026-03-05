@@ -1,0 +1,58 @@
+name: Helm Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  helm-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Install helm-unittest plugin
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest --version "~1"
+
+      - name: Download dependencies for addon charts
+        run: |
+          for chart in addon_charts/karpenter addon_charts/observability addon_charts/kubecost addon_charts/datadog-operator addon_charts/metrics-server addon_charts/backup addon_charts/azure-service-operator; do
+            if [ -d "$chart" ]; then
+              echo "Updating dependencies for $chart"
+              helm dependency update "$chart"
+            fi
+          done
+
+      - name: Lint base_chart
+        run: helm lint base_chart/
+
+      - name: Lint addon charts
+        run: |
+          for chart in addon_charts/*/; do
+            if [ -f "$chart/Chart.yaml" ]; then
+              echo "Linting $chart"
+              helm lint "$chart"
+            fi
+          done
+
+      - name: Template base_chart
+        run: helm template test base_chart/
+
+      - name: Test base_chart with helm-unittest
+        run: helm unittest base_chart/
+
+      - name: Test addon charts with helm-unittest
+        run: |
+          for chart in addon_charts/*/; do
+            if [ -d "$chart/tests" ]; then
+              echo "Testing $chart"
+              helm unittest "$chart"
+            fi
+          done

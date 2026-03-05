@@ -1,0 +1,75 @@
+should render a DatadogAgent:
+  1: |
+    apiVersion: datadoghq.com/v2alpha1
+    kind: DatadogAgent
+    metadata:
+      annotations:
+        ad.datadoghq.com/endpoints.check_names: '["kube_apiserver_metrics"]'
+        ad.datadoghq.com/endpoints.init_configs: '[{}]'
+        ad.datadoghq.com/endpoints.instances: '[{ "prometheus_url": "https://%%host%%:%%port%%/metrics", "bearer_token_auth": "true" }]'
+      name: datadog
+    spec:
+      features:
+        admissionController:
+          enabled: true
+          mutateUnlabelled: false
+        apm:
+          enabled: true
+          instrumentation:
+            enabled: true
+          unixDomainSocketConfig:
+            path: /var/run/datadog/apm.socket
+        cspm:
+          enabled: true
+        cws:
+          enabled: true
+        externalMetricsServer:
+          enabled: true
+        kubeStateMetricsCore:
+          enabled: true
+        liveProcessCollection:
+          enabled: true
+        logCollection:
+          containerCollectAll: true
+          enabled: true
+        npm:
+          enabled: true
+        otlp:
+          receiver:
+            protocols:
+              grpc:
+                enabled: true
+              http:
+                enabled: true
+        sbom:
+          containerImage:
+            enabled: true
+        usm:
+          enabled: true
+      global:
+        clusterName: algo-trading-plat
+        credentials:
+          apiKey: null
+          appKey: null
+        namespaceLabelsAsTags:
+          '*': <PREFIX>_%%label%%
+        nodeLabelsAsTags:
+          '*': <PREFIX>_%%label%%
+        podLabelsAsTags:
+          '*': <PREFIX>_%%label%%
+        registry: public.ecr.aws/datadog
+        site: datadoghq.com
+      override:
+        nodeAgent:
+          env:
+            - name: DD_PROCESS_CONFIG_RUN_IN_CORE_AGENT_ENABLED
+              value: "true"
+          extraConfd:
+            configDataMap:
+              kube_metrics_server.yaml: |-
+                ad_identifiers:
+                  - {}
+                init_config:
+                  {}
+                instances:
+                  {"prometheus_url": "https://%%host%%:443/metrics"}
