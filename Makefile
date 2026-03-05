@@ -51,7 +51,10 @@ template: ## Render all Helm templates
 
 ## Run helm-unittest tests for charts with tests/ directory
 test: ## Run helm-unittest tests
-	@echo "Running helm-unittest tests..."
+	@echo "Running helm-unittest tests for base_chart..."
+	helm unittest base_chart/
+	@echo ""
+	@echo "Running helm-unittest tests for addon charts..."
 	@test_count=0; \
 	for chart in addon_charts/*/; do \
 		chart_name=$$(basename "$$chart"); \
@@ -64,7 +67,7 @@ test: ## Run helm-unittest tests
 	if [ $$test_count -eq 0 ]; then \
 		echo "No test directories found in addon charts"; \
 	else \
-		echo "All tests completed"; \
+		echo "All addon chart tests completed"; \
 	fi
 
 ## Update helm-unittest snapshots
