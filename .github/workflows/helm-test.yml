@@ -19,7 +19,7 @@ jobs:
         uses: azure/setup-helm@v4
 
       - name: Install helm-unittest plugin
-        run: helm plugin install https://github.com/helm-unittest/helm-unittest --version "~1"
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest --version "~1" --verify=false
 
       - name: Download dependencies for addon charts
         run: |
