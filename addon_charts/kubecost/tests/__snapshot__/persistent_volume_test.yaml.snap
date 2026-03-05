@@ -1,0 +1,13 @@
+should render a PersistentVolumeClaim:
+  1: |
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: kube-cost-pvc
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 32Gi
+      storageClassName: kube-cost-storage-class

@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: karpenter NodePool
+templates:
+  - templates/1_node_pool.yaml
+tests:
+  - it: should render a NodePool
+    asserts:
+      - isKind:
+          of: NodePool
+      - isAPIVersion:
+          of: karpenter.sh/v1
+      - equal:
+          path: metadata.name
+          value: default
+      - matchSnapshot: {}

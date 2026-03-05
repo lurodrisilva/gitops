@@ -1,0 +1,9 @@
+should render a Provider:
+  1: |
+    apiVersion: pkg.crossplane.io/v1
+    kind: Provider
+    metadata:
+      name: provider-redis-azure
+    spec:
+      package: xpkg.upbound.io/upbound/provider-azure-cache:v2.3.0
+      packagePullPolicy: Always

@@ -1,0 +1,23 @@
+should render an EC2NodeClass:
+  1: |
+    apiVersion: karpenter.k8s.aws/v1
+    kind: EC2NodeClass
+    metadata:
+      name: default
+    spec:
+      amiSelectorTerms:
+        - alias: al2@latest
+      role: karpenter-algo-trading-plat
+      securityGroupSelectorTerms:
+        - tags:
+            karpenter.sh/discovery: algo-trading-plat
+      subnetSelectorTerms:
+        - tags:
+            karpenter.sh/discovery: algo-trading-plat
+      tags:
+        IntentLabel: apps
+        KarpenterNodePoolName: default
+        NodeType: default
+        intent: apps
+        karpenter.sh/discovery: algo-trading-plat
+        project: algo-trading-project
