@@ -53,13 +53,13 @@ tests:
           path: spec.syncPolicy.retry.limit
           value: 5
       - equal:
-          path: ignoreDifferences[0].group
+          path: spec.ignoreDifferences[0].group
           value: admissionregistration.k8s.io
       - equal:
-          path: ignoreDifferences[0].kind
+          path: spec.ignoreDifferences[0].kind
           value: ValidatingWebhookConfiguration
       - equal:
-          path: ignoreDifferences[0].name
+          path: spec.ignoreDifferences[0].name
           value: cert-manager-webhook
       - matchSnapshot:
           path: spec.syncPolicy
