@@ -23,7 +23,6 @@ jobs:
 
       - name: Download dependencies for addon charts
         run: |
-          #for chart in addon_charts/karpenter addon_charts/observability addon_charts/kubecost addon_charts/datadog-operator addon_charts/metrics-server addon_charts/backup addon_charts/azure-service-operator; do
           for chart in addon_charts/*/; do
             if [ -d "$chart" ]; then
               echo "Updating dependencies for $chart"
