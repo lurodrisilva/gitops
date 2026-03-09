@@ -1,4 +1,4 @@
-name: Helm Tests
+name: Helm CI
 
 on:
   pull_request:
