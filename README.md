@@ -1,4 +1,4 @@
-# AKS Baseline - GitOps Repository
+Platform Engineering k8s Baseline Addons
 
 [![Helm CI](https://github.com/lurodrisilva/gitops/actions/workflows/helm-ci.yml/badge.svg?branch=master)](https://github.com/lurodrisilva/gitops/actions/workflows/helm-ci.yml)
 
