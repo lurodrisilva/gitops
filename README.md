@@ -1,6 +1,6 @@
 # AKS Baseline - GitOps Repository
 
-[![Helm Tests](https://github.com/lurodrisilva/gitops/actions/workflows/helm-ci.yml/badge.svg?branch=master)](https://github.com/lurodrisilva/gitops/actions/workflows/helm-ci.yml)
+[![Helm CI](https://github.com/lurodrisilva/gitops/actions/workflows/helm-ci.yml/badge.svg?branch=master)](https://github.com/lurodrisilva/gitops/actions/workflows/helm-ci.yml)
 
 A GitOps repository for managing AKS cluster addons and platform services using ArgoCD. This repository works in conjunction with [01-aks-tf](../01-aks-tf/) which deploys the infrastructure (AKS, ArgoCD, Crossplane, Azure Service Operators).
 
