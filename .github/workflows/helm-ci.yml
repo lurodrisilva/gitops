@@ -56,3 +56,19 @@ jobs:
               helm unittest "$chart"
             fi
           done
+
+      - name: Package chart
+        run: |
+          make package
+
+      - name: Login to GHCR
+        run: |
+          echo "${GITHUB_TOKEN}" | helm registry login ghcr.io \
+            --username "${GITHUB_ACTOR}" \
+            --password-stdin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Helm chart
+        run: |
+          helm push control-plane-addons-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts          

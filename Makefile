@@ -89,3 +89,15 @@ snapshot-update: ## Update helm-unittest snapshots
 all: deps lint template test ## Run all targets (deps, lint, template, test)
 	@echo ""
 	@echo "All targets completed successfully"
+
+## Package the library chart into a .tgz archive
+package: ## Package the chart into a versioned .tgz archive
+	@echo "Packaging control-plane-addons"
+	helm package base_chart
+	@echo "Package complete"
+
+## Clean .tgz archive
+clean: ## Package the chart into a versioned .tgz archive
+	@echo "Cleaning control-plane-addons-..."
+	rm control-plane-addons-*.tgz
+	@echo "Cleanup complete"
