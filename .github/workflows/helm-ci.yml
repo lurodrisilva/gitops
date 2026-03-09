@@ -10,6 +10,7 @@ on:
 
 jobs:
   helm-test:
+    name: Lint, Test, Package & Push
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
