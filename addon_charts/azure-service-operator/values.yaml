@@ -147,9 +147,9 @@ installCRDs: true
 # together to enable other scenarios, such as dbformysql.azure.com/FlexibleServersFirewallRules, and it's generally
 # easier to just include the whole group.
 # See https://azure.github.io/azure-service-operator/guide/crd-management for more details.
-crdPattern: ""
+crdPattern: "resources.azure.com/*;network.azure.com/*;cache.azure.com/*"
 
-useJSONLogging: false
+useJSONLogging: true
 
 # deploymentAnnotations contain the deployment annotations for Azure Service Operator
 deploymentAnnotations: {}
