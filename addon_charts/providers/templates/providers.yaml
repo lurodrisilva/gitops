@@ -6,13 +6,13 @@
 #   package: xpkg.upbound.io/upbound/provider-azure-cache:v2.3.0
 #   packagePullPolicy: Always
 # ---
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: upbound-provider-azure-cache
-spec:
-  package: xpkg.upbound.io/upbound/provider-azure-cache:v2.5.2
-  packagePullPolicy: Always
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: upbound-provider-azure-cache
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-azure-cache:v2.5.2
+#   packagePullPolicy: Always
   # settings:
   #   logging:
   #     level: info
