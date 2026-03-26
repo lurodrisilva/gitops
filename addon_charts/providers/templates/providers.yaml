@@ -1,15 +1,22 @@
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-redis-azure
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-azure-cache:v2.3.0
+#   packagePullPolicy: Always
+# ---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-redis-azure
+  name: upbound-provider-azure-cache
 spec:
-  package: xpkg.upbound.io/upbound/provider-azure-cache:v2.3.0
+  package: xpkg.upbound.io/upbound/provider-azure-cache:v2.5.2
   packagePullPolicy: Always
-
   # settings:
   #   logging:
-  #     level: debug
-  #   aws:
+  #     level: info
+  #   azure:
   #     maxRetries: 10  # Increase retry attempts
   # args:
   #   - core
@@ -17,6 +24,15 @@ spec:
   #   - --provider-ratelimit-qps=20  # Increase from default
   #   - --provider-ratelimit-burst=50  # Increase from default
   #   - --sync-timeout=5m  # Extend default timeout (default is 2m)
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: upbound-provider-family-azure
+spec:
+  package: xpkg.upbound.io/upbound/provider-family-azure:v2.5.1
+  packagePullPolicy: Always
+---
 # ---
 # apiVersion: pkg.crossplane.io/v1
 # kind: Provider
