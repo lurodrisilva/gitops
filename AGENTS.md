@@ -4,7 +4,7 @@
 
 ArgoCD App-of-Apps GitOps repository managing AKS cluster addons via Helm charts.
 No application code — pure infrastructure-as-code (YAML/Helm templates only).
-Deployed automatically by ArgoCD from `base_chart/`. Companion infra repo: `../01-aks-tf/`.
+Deployed automatically by ArgoCD from `base_chart/`. Companion infra repo: `../03-plat-eng-aks-foundation/`.
 
 ## Repository Structure
 
@@ -15,7 +15,7 @@ base_chart/                  # Main Helm chart — creates ArgoCD Application CR
   templates/
     {NN}-{addon-name}.yaml   # ArgoCD Application template per addon (NN = sync wave)
 
-addon_charts/                # Individual addon Helm charts (21 addons)
+addon_charts/                # Individual addon Helm charts (19 addons)
   {addon-name}/
     Chart.yaml               # Chart metadata + upstream dependencies
     values.yaml              # Value overrides for upstream chart
@@ -24,16 +24,38 @@ addon_charts/                # Individual addon Helm charts (21 addons)
 
 ## Build / Lint / Validate Commands
 
-No Makefile or CI pipeline. Use Helm CLI directly. **After any change, always run both lint and template.**
-
 ```bash
-helm lint base_chart/                                    # Primary validation
-helm template base_chart/ --values base_chart/values.yaml # Render all templates
-helm template base_chart/ --values base_chart/values.yaml | grep -A 50 <addon-name>  # Filter one addon
-helm lint addon_charts/<addon-name>/                      # Lint single addon chart
-helm template <release> addon_charts/<addon-name>/        # Render single addon chart
-helm dependency update addon_charts/<addon-name>/         # Download upstream chart deps
+make help             # Show available targets
+make plugin-install   # Install helm-unittest Helm plugin
+make deps             # Download Helm dependencies for charts with Chart.lock
+make lint             # Lint all Helm charts (base_chart + addon_charts)
+make template         # Render all Helm templates
+make test             # Run helm-unittest tests
+make snapshot-update  # Update helm-unittest snapshots
+make all              # deps + lint + template + test
+make package          # Package base_chart into .tgz
+make clean            # Remove packaged .tgz files
 ```
+
+## CI Pipeline
+
+Workflow file: `.github/workflows/helm-ci.yml`
+
+Triggers: push to `master`, pull_request to `master`
+
+Steps:
+1. Checkout repository
+2. Install Helm
+3. Install helm-unittest plugin
+4. Download Helm dependencies for all addon charts (loop)
+5. Lint `base_chart/`
+6. Lint all addon charts (loop)
+7. Render templates for `base_chart/`
+8. Run helm-unittest tests for `base_chart/`
+9. Run helm-unittest tests for all addon charts (loop)
+10. Package `base_chart/` into `.tgz`
+11. Login to GHCR
+12. Push packaged chart to GHCR
 
 ## Architecture
 
